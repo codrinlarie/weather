@@ -1,10 +1,16 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const serverless = require('serverless-http');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
+
+app.get('/api', (req, res) => {
+    res.json({ message: 'Hello from Express!' });
+  });
+
 const PORT = process.env.PORT || 5000;
 const apiKey = process.env.API_KEY;
 
@@ -43,3 +49,5 @@ app.get('/weather', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports.handler = serverless(app);

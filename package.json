@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "nw src/",
     "prod": "nwbuild buildDir dist/ src/",
-    "start": "node index.js"
+    "start": "node functions/api.js"
   },
-  "author": "",
+  "author": "stefanlarie",
   "license": "ISC",
   "devDependencies": {
     "nw": "^0.66.1",
@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "serverless-http": "^3.2.0"
   }
 }
