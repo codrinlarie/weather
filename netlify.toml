@@ -3,6 +3,6 @@ functions = "netlify/functions"
 publish = "."
    
 [[redirects]]
-from = "weather/*"
+from = "/*"
 to = "/.netlify/functions/:splat"
 status = 200
