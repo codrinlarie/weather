@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://codrinlarie.github.io'
+    origin: 'https://codrinlarie.github.io/cloudyskies/'
   }));
 
 app.get('/', (req, res) => {
