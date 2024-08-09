@@ -12,6 +12,8 @@ app.use(cors({
     origin: 'https://codrinlarie.github.io'
   }));
 
+app.options('*', cors());
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello from Express!' });
   });
