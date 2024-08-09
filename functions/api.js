@@ -5,7 +5,10 @@ const serverless = require('serverless-http');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+    origin: 'https://codrinlarie.github.io'
+  }));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Hello from Express!' });
