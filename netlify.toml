@@ -3,7 +3,7 @@ functions = "functions"
 publish = "."
    
 [[redirects]]
-from = "/*"
-to = "/.netlify/functions/api/:splat"
+from = "/api/*"
+to = "/.functions/:splat"
 status = 200
    
