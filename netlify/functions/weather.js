@@ -4,18 +4,17 @@ const cors = require('cors');
 const serverless = require('serverless-http');
 require('dotenv').config();
 
+const apiKey = process.env.API_KEY;
+
 const app = express();
 
 app.use(cors({
-    origin: 'https://codrinlarie.github.io'
+    origin: 'https://codrinlarie.github.io/cloudyskies'
   }));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Hello from Express!' });
   });
-
-// const PORT = process.env.PORT || 5000;
-const apiKey = process.env.API_KEY;
 
 app.get('/weather', async (req, res) => {
     const { lat, lon } = req.query;
@@ -48,9 +47,5 @@ app.get('/weather', async (req, res) => {
         }
     }
 });
-
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
 
 module.exports.handler = serverless(app);
