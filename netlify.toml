@@ -4,5 +4,5 @@ publish = "."
    
 [[redirects]]
 from = "/*"
-to = "/.netlify/functions/aoi/:splat"
+to = "/.netlify/functions/api/:splat"
 status = 200
