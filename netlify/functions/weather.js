@@ -1,10 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const serverless = require('serverless-http');
 require('dotenv').config();
 
-const apiKey = process.env.API_KEY;
+exports.handler = async function(event, context) {
+    const apiKey = process.env.API_KEY;
 
 const app = express();
 
@@ -13,10 +13,6 @@ app.use(cors({
   }));
 
 app.options('*', cors());
-
-app.get('/', (req, res) => {
-    res.json({ message: 'Hello from Express!' });
-  });
 
 app.get('/.netlify/functions/weather', async (req, res) => {
     const { lat, lon } = req.query;
@@ -49,5 +45,8 @@ app.get('/.netlify/functions/weather', async (req, res) => {
         }
     }
 });
-
-module.exports.handler = serverless(app);
+    return {
+        statusCode: 200,
+        body: JSON.stringify({message: "CloudySkies"})
+    };
+};
