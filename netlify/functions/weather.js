@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello from Express!' });
   });
 
-app.get('/weather', async (req, res) => {
+app.get('/.netlify/functions/weather', async (req, res) => {
     const { lat, lon } = req.query;
 
     if (!apiKey) {
