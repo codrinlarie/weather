@@ -1,52 +1,65 @@
-const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 require('dotenv').config();
+const { stream } = require("@netlify/functions");
 
-exports.handler = async function(event, context) {
+exports.handler = stream(async (event) => {
     const apiKey = process.env.API_KEY;
 
-const app = express();
+    app.use(cors({
+        origin: 'https://codrinlarie.github.io'
+    }));
 
-app.use(cors({
-    origin: 'https://codrinlarie.github.io'
-  }));
+    app.options('*', cors());
 
-app.options('*', cors());
-
-app.get('/.netlify/functions/weather', async (req, res) => {
-    const { lat, lon } = req.query;
+     // Get latitude and longitude from query parameters
+    const lat = event.queryStringParameters?.lat;
+    const lon = event.queryStringParameters?.lon;
 
     if (!apiKey) {
-        return res.status(500).json({ error: 'API key is not configured' });
+        return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'API key is not configured' })
+        };
     }
 
     if (!lat || !lon) {
-        return res.status(400).json({ error: 'Latitude and longitude are required' });
+        return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Latitude and longitude are required' })
+        };
     }
 
-    try {
-        const apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-        const response = await axios.get(apiUrl);
-        console.log('Weather data fetched successfully');
-        res.json(response.data);
-    } catch (error) {
-        console.error('Error fetching the weather data:', error.message);
+  try {
+    const apiUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    
+    // Use axios to make the API call
+    const response = await axios.get(apiUrl, { responseType: 'stream' });
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Transfer-Encoding': 'chunked'
+      },
+      body: response.data
+    };
+
+    } 
+    
+    catch (error) {
+
+        console.error('Error fetching weather data:', error);
+        
+        let statusCode = 500;
+        let errorMessage = 'An unexpected error occurred';
+
         if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            res.status(error.response.status).json({ error: error.response.data });
+        statusCode = error.response.status;
+        errorMessage = error.response.data.message || 'Error from OpenWeatherMap API';
         } else if (error.request) {
-            // The request was made but no response was received
-            res.status(503).json({ error: 'Unable to reach the weather service' });
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            res.status(500).json({ error: 'An unexpected error occurred' });
+        statusCode = 503;
+        errorMessage = 'Unable to reach the weather service';
         }
     }
 });
-    return {
-        statusCode: 200,
-        body: JSON.stringify({message: "CloudySkies"})
-    };
-};
