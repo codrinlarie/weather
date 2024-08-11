@@ -6,11 +6,11 @@ const { stream } = require("@netlify/functions");
 exports.handler = stream(async (event) => {
     const apiKey = process.env.API_KEY;
 
-    app.use(cors({
-        origin: 'https://codrinlarie.github.io'
-    }));
+    // app.use(cors({
+    //     origin: 'https://codrinlarie.github.io'
+    // }));
 
-    app.options('*', cors());
+    // app.options('*', cors());
 
      // Get latitude and longitude from query parameters
     const lat = event.queryStringParameters?.lat;
